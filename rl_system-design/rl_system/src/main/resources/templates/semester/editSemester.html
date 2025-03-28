@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Semester</title>
+  <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+<body>
+<div class="container">
+  <h1>Edit Semester</h1>
+  <form th:action="@{/semester/update/{id}(id=${semester.id})}" th:object="${semester}" method="post">
+    <label for="name">Semester Name</label>
+    <input type="text" id="name" th:field="*{name}" />
+
+    <label for="startDate">Start Date</label>
+    <input type="date" id="startDate" th:field="*{startDate}" />
+
+    <label for="endDate">End Date</label>
+    <input type="date" id="endDate" th:field="*{endDate}" />
+
+    <button type="submit" class="btn btn-success">Save</button>
+  </form>
+</div>
+</body>
+</html>

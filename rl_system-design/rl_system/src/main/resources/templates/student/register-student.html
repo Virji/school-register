@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Register Student</title>
+  <link rel="stylesheet" th:href="@{/styles.css}" />
+
+</head>
+<body>
+
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed">
+  <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="d-flex align-items-center justify-content-center w-100">
+      <div class="row justify-content-center w-100">
+        <div class="col-md-8 col-lg-6 col-xxl-3">
+          <div class="card mb-0">
+            <div class="card-body">
+
+              <a class="text-nowrap logo-img text-center d-block py-3 w-100">
+                <img src="/school-logo.svg" width="200" alt="" />
+              </a>
+
+              <p class="text-center">Connecting Students, Teachers, and Parents Seamlessly</p>
+              <h2 class="text-center">Register Student</h2>
+
+              <form th:action="@{/register/student}" th:object="${user}" method="post">
+                <div class="mb-3">
+                  <label for="firstName">First Name:</label>
+                  <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Enter First Name" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="lastName">Last Name:</label>
+                  <input type="text" class="form-control" id="lastName" th:field="*{lastName}" placeholder="Enter Last Name" required>
+                </div>
+
+                <div class="mb-4">
+                  <label for="email">Email:</label>
+                  <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Enter Email" required>
+                </div>
+
+                <div class="mb-4">
+                  <label for="password">Password:</label>
+                  <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Enter Password" required>
+                </div>
+
+                <div class="mb-4">
+                <label for="school">School:</label>
+                <select class="form-control" id="school" th:field="*{school.id}" required>
+                  <option th:each="school : ${schools}" th:value="${school.id}" th:text="${school.name}">Select a School</option>
+                </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Register</button>
+
+                <div class="d-flex align-items-center justify-content-center">
+                  <p class="fs-4 mb-0 fw-bold">Already Have an Account?</p>
+                  <a href="/login" class="register-link">Sign In</a>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+</body>
+</html>

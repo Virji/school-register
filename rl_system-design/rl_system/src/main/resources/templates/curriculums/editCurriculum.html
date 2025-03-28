@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Curriculum</title>
+  <link rel="stylesheet" th:href="@{/styles.css}"/>
+</head>
+<body>
+<div class="container">
+  <h1>Edit Curriculum</h1>
+  <form th:action="@{/curriculum/update/{id}(id=${curriculum.id})}" th:object="${curriculum}" method="post">
+    <label for="class">Class</label>
+    <select id="class" th:field="*{schoolClass}">
+      <option th:each="class : ${classes}" th:value="${class.id}" th:text="${class.name}"></option>
+    </select>
+
+    <label for="subject">Subject</label>
+    <select id="subject" th:field="*{schoolSubject}">
+      <option th:each="subject : ${subjects}" th:value="${subject.id}" th:text="${subject.name}"></option>
+    </select>
+
+    <label for="teacher">Teacher</label>
+    <select id="teacher" th:field="*{teacher}">
+      <option th:each="teacher : ${teachers}" th:value="${teacher.id}"
+              th:text="${teacher.firstName + ' ' + teacher.lastName}"></option>
+    </select>
+
+    <label for="school">School</label>
+    <select id="school" th:field="*{school}">
+      <option th:each="school : ${schools}" th:value="${school.id}" th:text="${school.name}"></option>
+    </select>
+
+    <label for="semester">Semester</label>
+    <select id="semester" th:field="*{semester}">
+      <option th:each="semester : ${semesters}" th:value="${semester.id}" th:text="${semester.name}"></option>
+    </select>
+
+    <button type="submit" class="btn btn-success">Save</button>
+  </form>
+</div>
+</body>
+</html>

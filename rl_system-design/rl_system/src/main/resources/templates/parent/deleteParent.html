@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Delete Parent</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+  <h2>Delete Parent</h2>
+  <form th:action="@{/school/processDeleteParent}" method="post">
+    <div class="form-group">
+      <label for="parentId">Parent ID</label>
+      <input type="text" class="form-control" id="parentId" name="parentId" required>
+    </div>
+    <button type="submit" class="btn btn-danger">Delete Parent</button>
+  </form>
+  <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+</div>
+</body>
+</html>

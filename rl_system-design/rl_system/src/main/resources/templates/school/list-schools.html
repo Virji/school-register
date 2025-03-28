@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>School Directory</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+
+</head>
+<body>
+
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed">
+
+    <aside class="left-sidebar">
+
+        <div>
+            <div class="brand-logo d-flex align-items-center justify-content-between">
+                <img src="/school-logo.svg" width="200" alt="" />
+                <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                    <span> <img src="/x-lg.svg" alt=""></span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+                <ul id="sidebarnav">
+
+                    <li class="nav-small-cap">
+                        <span class="hide-menu">Home</span>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/admin/home" aria-expanded="false">
+                            <span> <img src="/menu-button-wide.svg" alt=""></span>
+                            <span class="hide-menu">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-small-cap">
+                        <span class="hide-menu">REPORTS</span>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a href="/admin/addSchool" class="sidebar-link" aria-expanded="false">
+                            <span> <img src="/send.svg" alt=""></span>
+                            <span class="hide-menu">Add School</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a href="/school/list" class="sidebar-link" aria-expanded="false">
+                            <span> <img src="/send-check.svg" alt=""></span>
+                            <span class="hide-menu">View List of Schools</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a href="/class/list" class="sidebar-link" aria-expanded="false">
+                            <span> <img src="/send-check.svg" alt=""></span>
+                            <span class="hide-menu">View List of Classes</span>
+                        </a>
+                    </li>
+                    <li class="nav-small-cap">
+                        <span class="hide-menu">MANAGEMENT</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/curriculum/list" class="sidebar-link" aria-expanded="false">
+                            <span><img src="/send-check.svg" alt=""></span>
+                            <span class="hide-menu">View List of Curriculums</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/semester/list" class="sidebar-link" aria-expanded="false">
+                            <span><img src="/send-check.svg" alt=""></span>
+                            <span class="hide-menu">View List of Semesters</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/schedule/view" class="sidebar-link" aria-expanded="false">
+                            <span><img src="/send-check.svg" alt=""></span>
+                            <span class="hide-menu">View Schedule</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <form th:action="@{/logout}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit" class="btn btn-danger">Logout</button>
+                        </form>
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
+
+    </aside>
+
+    <div class="body-wrapper">
+        <header class="app-header">
+            <nav class="navbar navbar-expand-lg navbar-light">
+
+                <ul class="navbar-nav">
+                    <li class="nav-item d-block d-xl-none">
+                        <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+                            <img src="/list.svg" alt="">
+                        </a>
+                    </li>
+                </ul>
+
+            </nav>
+        </header>
+
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">School Info</h3>
+
+                        <!-- -->
+
+                        <div class="row" th:each="tempSchool : ${schools}">
+                            <div class="col-md-12">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h4 th:text="${tempSchool.name}">School Name</h4>
+                                    </div>
+                                    <div class="card-body">
+
+                                        <div class="col-md">
+                                            <div class="mt-3 list-inline list-inline-dots mb-0 text-muted d-sm-block d-none">
+                                                <div class="list-inline-item">
+                                                    <p><strong>Address:</strong> <span th:text="${tempSchool.address}">School Address</span></p>
+                                                </div>
+
+                                                <div class="list-inline-item">
+                                                    <p><strong>School ID:</strong> <span th:text="${tempSchool.id}">School ID</span></p>
+                                                </div>
+
+                                                <div class="list-inline-item">
+                                                    <p><strong>Director Name: </strong><span th:text="${tempSchool.director != null ? tempSchool.director.firstName + ' ' + tempSchool.director.lastName : 'No Director' }"></span>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                        <hr>
+                                        <div class="card-body-actions">
+                                            <a th:href="@{/school/addDirector(school_id=${tempSchool.id})}" class="btn btn-outline-secondary">Add Director</a>
+                                            <a th:href="@{/school/updateDirector(director_id=${tempSchool.director != null ? tempSchool.director.id : 0})}" class="btn btn-outline-secondary" th:if="${tempSchool.director != null}">Update Director</a>
+                                            <a th:href="@{/school/deleteDirector(director_id=${tempSchool.director != null ? tempSchool.director.id : 0}, school_id=${tempSchool.id})}" class="btn btn-outline-secondary" th:if="${tempSchool.director != null}" onclick="return confirm('Are you sure you want to delete this director?');">Delete Director</a>
+                                            <a th:href="@{/school/displayDirector(director_id=${tempSchool.director != null ? tempSchool.director.id : 0})}" class="btn btn-outline-secondary" th:if="${tempSchool.director != null}">Display Director</a>
+                                            <br><br>
+                                            <a th:href="@{/school/addTeacher(school_id=${tempSchool.id})}" class="btn btn-outline-secondary">Add Teacher</a>
+                                            <a th:href="@{/school/updateTeacher(school_id=${tempSchool.id})}" class="btn btn-outline-secondary">Update Teacher</a>
+                                            <a th:href="@{/school/deleteTeacher(school_id=${tempSchool.id})}" class="btn btn-outline-secondary">Delete Teacher</a>
+                                            <a th:href="@{/school/displayTeachers(school_id=${tempSchool.id})}" class="btn btn-outline-secondary">Display Teachers</a>
+                                            <br><br>
+                                            <a th:href="@{/school/addStudent(school_id=${tempSchool.id})}" class="btn btn-outline-secondary">Add Student</a>
+                                            <a th:href="@{/school/updateStudent(school_id=${tempSchool.id})}" class="btn btn-outline-secondary">Update Student</a>
+                                            <a th:href="@{/school/deleteStudent(school_id=${tempSchool.id})}" class="btn btn-outline-secondary">Delete Student</a>
+                                            <a th:href="@{/school/students(school_id=${tempSchool.id})}" class="btn btn-outline-secondary">Display Students</a>
+                                            <br><br>
+                                            <a th:href="@{/school/addParent(student_id=${tempSchool.id})}" class="btn btn-outline-secondary">Add Parent</a>
+                                            <a th:href="@{/school/updateParent(parent_id=${tempSchool.director != null ? tempSchool.director.id : 0})}" class="btn btn-outline-secondary">Update Parent</a>
+                                            <a th:href="@{/school/deleteParent(parent_id=${tempSchool.director != null ? tempSchool.director.id : 0}, student_id=${tempSchool.id})}" class="btn btn-outline-secondary" onclick="return confirm('Are you sure you want to delete this parent?');">Delete Parent</a>
+                                            <a th:href="@{/school/displayParents(school_id=${tempSchool.id})}" class="btn btn-outline-secondary">Display Parents</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

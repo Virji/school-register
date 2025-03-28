@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Schedule</title>
+  <link rel="stylesheet" th:href="@{/styles.css}"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+<aside class="left-sidebar">
+  <div>
+    <div class="brand-logo d-flex align-items-center justify-content-between">
+      <img src="/school-logo.svg" width="200" alt="" />
+      <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+        <span><img src="/x-lg.svg" alt=""></span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+      <ul id="sidebarnav">
+        <li class="nav-small-cap"><span class="hide-menu">Home</span></li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="/admin/home" aria-expanded="false">
+            <span><img src="/menu-button-wide.svg" alt=""></span>
+            <span class="hide-menu">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-small-cap"><span class="hide-menu">REPORTS</span></li>
+        <li class="sidebar-item">
+          <a href="/admin/addSchool" class="sidebar-link" aria-expanded="false">
+            <span><img src="/send.svg" alt=""></span>
+            <span class="hide-menu">Add School</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/school/list" class="sidebar-link" aria-expanded="false">
+            <span><img src="/send-check.svg" alt=""></span>
+            <span class="hide-menu">View List of Schools</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/class/list" class="sidebar-link" aria-expanded="false">
+            <span><img src="/send-check.svg" alt=""></span>
+            <span class="hide-menu">View List of Classes</span>
+          </a>
+        </li>
+        <li class="nav-small-cap">
+          <span class="hide-menu">MANAGEMENT</span>
+        </li>
+        <li class="sidebar-item">
+          <a href="/curriculum/list" class="sidebar-link" aria-expanded="false">
+            <span><img src="/send-check.svg" alt=""></span>
+            <span class="hide-menu">View List of Curriculums</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/semester/list" class="sidebar-link" aria-expanded="false">
+            <span><img src="/send-check.svg" alt=""></span>
+            <span class="hide-menu">View List of Semesters</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/schedule/view" class="sidebar-link" aria-expanded="false">
+            <span><img src="/send-check.svg" alt=""></span>
+            <span class="hide-menu">View Schedule</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <form th:action="@{/logout}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <button type="submit" class="btn btn-danger">Logout</button>
+          </form>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+<div class="container">
+  <h1>Schedule</h1>
+  <form th:action="@{/schedule/save}" th:object="${schedule}" method="post" id="scheduleForm">
+    <label for="class">Class:</label>
+    <select id="class" name="class" th:field="*{classId}">
+      <option th:each="class : ${classes}" th:value="${class.id}" th:text="${class.name}"></option>
+    </select>
+
+    <label for="semester">Semester:</label>
+    <select id="semester" name="semester" th:field="*{semesterId}">
+      <option th:each="semester : ${semesters}" th:value="${semester.id}" th:text="${semester.name}"></option>
+    </select>
+
+    <table border="1">
+      <thead>
+      <tr>
+        <th>Time</th>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="timeSlot, iterStat : ${timeSlots}">
+        <td th:text="${timeSlot}"></td>
+        <td th:each="day : ${daysOfWeek}">
+          <select th:field="*{scheduleMap['__' + timeSlot + '__' + day + '__']}" name="scheduleMap[${timeSlot}][${day}]">
+            <option th:each="subject : ${subjects}" th:value="${subject.id}" th:text="${subject.name}"></option>
+          </select>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <!-- <button type="submit" class="btn btn-success">Save</button> -->
+    <button type="button" class="btn btn-info" onclick="printSchedule()">Print</button>
+    <button type="button" class="btn btn-primary" onclick="downloadAsJpg()">Download as JPG</button>
+    <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+  </form>
+</div>
+<script>
+function printSchedule() {
+    window.print();
+}
+
+function downloadAsJpg() {
+    html2canvas(document.getElementById('scheduleForm')).then(canvas => {
+        const imgData = canvas.toDataURL('image/jpeg');
+        const link = document.createElement('a');
+        link.href = imgData;
+        link.download = 'schedule.jpg';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+}
+</script>
+</body>
+</html>
